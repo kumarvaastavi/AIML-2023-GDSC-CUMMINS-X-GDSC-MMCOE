@@ -1,6 +1,7 @@
 import nltk
 import sys
 import grammar as g
+import re
 
 # creating a grammer object to read from the string of grammer rules 
 grammar = nltk.CFG.fromstring(g.NONTERMINALS + g.TERMINALS)
@@ -49,6 +50,15 @@ def preprocess(sentence):
     and removing any word that does not contain at least one alphabetic
     character.
     """
+    pattern = r'\b(?:[A-Za-z]+[0-9]*[A-Za-z]*[0-9]*)+\b'
+
+    # Use re.sub to replace non-matching words with an empty string
+    result = re.sub(pattern, '', sentence)
+    for word in result:
+        sentence = re.sub(r'\b' + re.escape(word) + r'\b', '', sentence)
+    words = re.split(r'\s+', string)
+    # Remove any empty strings resulting from multiple spaces
+    words = [word for word in words if word]
     raise NotImplementedError
 
 
